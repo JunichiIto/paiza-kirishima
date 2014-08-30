@@ -13,7 +13,7 @@ end
 
 class OfferGroup
   def initialize(offers)
-    @offers = offers.flatten
+    @offers = offers
   end
   def programmer_count
     @programmer_count ||= @offers.map(&:programmer_count).inject{|sum, x| sum + x }
