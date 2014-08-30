@@ -16,9 +16,13 @@ class OfferGroup
     @offers = offers
   end
   def programmer_count
-    @programmer_count ||= @offers.inject(0){|sum, offer| sum + offer.programmer_count }
+    @programmer_count ||= sum_of(:programmer_count)
   end
   def total_cost
-    @total_cost ||= @offers.inject(0){|sum, offer| sum + offer.total_cost }
+    @total_cost ||= sum_of(:total_cost)
+  end
+  private
+  def sum_of(attr)
+    @offers.inject(0){|sum, offer| sum + offer.send(attr) }
   end
 end
