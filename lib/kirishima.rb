@@ -1,9 +1,8 @@
 class Kirishima
   def main(programmer_count, offers)
-    all_combinations = (1..offers.size).flat_map do |n|
+    (1..offers.size).flat_map {|n|
       offers.combination(n).map{|offers| OfferGroup.new(offers)}
-    end
-    all_combinations.select {|offer_group|
+    }.select {|offer_group|
       offer_group.programmer_count >= programmer_count
     }.min_by(&:total_cost).total_cost
   end
