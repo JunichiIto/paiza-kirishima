@@ -1,4 +1,8 @@
 class Kirishima
+  def self.main(programmer_count, offers)
+    self.new.main(programmer_count, offers)
+  end
+
   def main(programmer_count, offers)
     (1..offers.size)
       .flat_map{|n| build_offer_groups(n, programmer_count, offers) }
@@ -14,23 +18,20 @@ class Kirishima
       .combination(n)
       .map{|offer_group| OfferGroup.new(offer_group, programmer_count) }
   end
-end
 
-class Offer < Struct.new(:programmer_count, :total_cost)
-end
+  class OfferGroup
+    attr_reader :total_cost, :programmers_enough
+    alias :programmers_enough? :programmers_enough
 
-class OfferGroup
-  attr_reader :total_cost, :programmers_enough
-  alias :programmers_enough? :programmers_enough
+    def initialize(offers, required_programmer_count)
+      @programmers_enough = sum_of(:programmer_count, offers) >= required_programmer_count
+      @total_cost = sum_of(:total_cost, offers)
+    end
 
-  def initialize(offers, required_programmer_count)
-    @programmers_enough = sum_of(:programmer_count, offers) >= required_programmer_count
-    @total_cost = sum_of(:total_cost, offers)
-  end
+    private
 
-  private
-
-  def sum_of(attr, offers)
-    offers.inject(0){|sum, offer| sum + offer.send(attr) }
+    def sum_of(attr, offers)
+      offers.inject(0){|sum, offer| sum + offer.send(attr) }
+    end
   end
 end
