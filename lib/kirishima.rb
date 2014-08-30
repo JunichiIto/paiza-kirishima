@@ -1,11 +1,25 @@
 class Kirishima
   def main(programmer_count, offers)
     all_combinations = (1..offers.size).flat_map do |n|
-      offers.combination(n).to_a
+      offers.combination(n).map{|offers| OfferGroup.new(offers)}
     end
-    counts_and_moneys = all_combinations.map do |offer_array|
-      [offer_array.map(&:first).inject{|sum,x| sum + x }, offer_array.map(&:last).inject{|sum,x| sum + x }]
-    end
-    counts_and_moneys.select{|counts, _| counts >= programmer_count }.min_by(&:last).last
+    all_combinations.select {|offer_group|
+      offer_group.programmer_count >= programmer_count
+    }.min_by(&:total_cost).total_cost
+  end
+end
+
+class Offer < Struct.new(:programmer_count, :total_cost)
+end
+
+class OfferGroup
+  def initialize(offers)
+    @offers = offers.flatten
+  end
+  def programmer_count
+    @programmer_count ||= @offers.map(&:programmer_count).inject{|sum, x| sum + x }
+  end
+  def total_cost
+    @total_cost ||= @offers.map(&:total_cost).inject{|sum, x| sum + x }
   end
 end
