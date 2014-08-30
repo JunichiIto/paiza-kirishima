@@ -14,8 +14,8 @@ end
 class OfferGroup
   attr_reader :programmer_count, :total_cost
   def initialize(offers)
-    @programmer_count ||= sum_of(offers, :programmer_count)
-    @total_cost ||= sum_of(offers, :total_cost)
+    @programmer_count = sum_of(offers, :programmer_count)
+    @total_cost = sum_of(offers, :total_cost)
   end
   private
   def sum_of(offers, attr)
