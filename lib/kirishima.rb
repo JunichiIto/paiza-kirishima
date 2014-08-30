@@ -1,5 +1,5 @@
 class Kirishima
-  def main
+  def main(programmer_count, offers)
     1
   end
 end
